@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="style.css" />
 
 </head>
 <body>
@@ -21,15 +23,57 @@
     <div class="slider">
         <div class="list">
             <div class="item">
-                <img src="img/1.jpg" alt="Image 1">
-                <div class="name">Deadlock</div> <!-- Teks Deadlock -->
-                <figure>
-                    <img src="img/avatar/1.png" alt="Avatar 1">
-                    <figcaption>Sentinel / Sonic Sensor / Barrier Mesh / Gravnet / Annihilation</figcaption>
-                </figure>
+                <img src="img/jett.jpg" alt="jett">
+                <div class="detail">
+                    <div class="title">Valorant</div>
+                    <div class="name">jett</div>
+                    <figure>
+                        <img src="img/avatar/duelist.png" alt="duelist">
+                        <figcaption>Updraft || TailWind || CloudBurst || Blade Storm</figcaption>
+                    </figure>
+                    <div class="desc">Representing her home country of South Korea, Jett's agile and evasive fighting style lets her take risks no one else can. She runs circles around every skirmish,
+                         cutting enemies before they even know what hit them.</div>
+                    <a href="#" class="more">More Details &raquo;</a>
+                </div>
+            </div>
+            <div class="item">
+                <img src="img/vyper.jpg" alt="vyper">
+                <div class="detail">
+                    <div class="title">Valorant</div>
+                    <div class="name">viper</div>
+                    <figure>
+                        <img src="img/avatar/controller.png" alt="duelist">
+                        <figcaption>Poison Cloud || Toxic Screen || Snake bite || Viper's pit</figcaption>
+                    </figure>
+                    <div class="desc">The American Chemist, Viper deploys an array of poisonous chemical devices to control the battlefield and choke the enemy's vision.
+                         If the toxins don't kill her prey, her mindgames surely will.</div>
+                    <a href="#" class="more">More Details &raquo;</a>
+                </div>
             </div>
         </div>
-        <div class="thumbnail"></div>
+        <div class="thumbnail">
+            <div class="item">
+                <img src="img/jett thumb.jpg" alt="jett thumb">
+                <div class="detail">
+                    <div class="name">jett</div>
+                    <blockquote>"Snack time! Sorry, I only brought enough for me."</blockquote>
+                </div>
+            </div>
+            <div class="item">
+                <img src="img/viper thumb.jpg" alt="viper thumb">
+                <div class="detail">
+                    <div class="name">viper</div>
+                    <blockquote> "They are not important. Let's move through them, like smoke through lungs."</blockquote>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrows">
+            <button id="prev">&lt;</button>
+            <button id="next">&gt;</button>
+        </div>
+
+        <div class="loading-bar"></div>
     </div>
 
     <script src="script.js"></script>

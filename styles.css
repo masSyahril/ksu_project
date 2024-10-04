@@ -7,8 +7,8 @@ body {
 }
 
 header {
-  width: 1200px;
-  left: 1050px;
+  width: 10px;
+  left: 390px;
   top: 0;
   padding: 10px;
   margin: auto;
@@ -43,6 +43,7 @@ header nav a {
 .slider .list .item {
   position: absolute;
   inset: 0 0 0 0;
+  z-index: 2;
 }
 
 .slider .list .item > img {
@@ -52,13 +53,14 @@ header nav a {
 }
 
 .slider .list .item .detail {
-  position: absolute;
-  top: 60%;
-  max-width: 900%;
+  position:relative;
+  top: 10%;
+  max-width: 20%;
   margin: auto;
-  left: 62%;
+  left: 12%;
   transform: translateX(-150%);
   text-shadow: 0 5px 10px #000;
+  overflow: visible;
 }
 
 .slider .list .item .detail .title {
@@ -72,8 +74,8 @@ header nav a {
 
 .slider .list .item .detail .name {
   font-weight: 900;
-  /* bottom: 10px;
-  left: 10px; */
+  bottom: 10px;
+  left: 10px;
   text-transform: uppercase;
   font-size: 3.5rem;
   letter-spacing: 0.1rem;
@@ -87,6 +89,7 @@ header nav a {
 
 .slider .list .item .detail figure {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 0.5rem;
 }
@@ -97,10 +100,12 @@ header nav a {
 
 .slider .list .item .detail figure figcaption {
   text-transform: uppercase;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
-  letter-spacing: 0.1rem;
+  letter-spacing: 0.05rem;
+  text-align: center;
 }
+
 
 .slider .list .item .detail .desc {
   margin-top: 1rem;
@@ -177,13 +182,13 @@ header nav a {
 /* ARROWWS */
 .arrows {
     position: absolute;
-    top: 80%;
-    right: 52%;
+    top: 60%;
+    right: 38%;
     width: 300px;
     max-width: 30%;
     display: flex;
     align-items: center;
-    gap: 0y.8rem;
+    gap: 0.8rem;
 }
 
 .arrows button{
@@ -201,7 +206,7 @@ header nav a {
 .arrows button:hover {
     background-color: #b86244;
     color: #fff;
-}
+} 
 
 /* starting animation */
 
@@ -217,7 +222,7 @@ header nav a {
     transform: translateY(50px);
     filter: blur(50px);
     opacity: 0;
-    animation: showDetail 05.s 1s linear;
+    animation: showDetail 0.5s 1s linear;
 }
 
 @keyframes showDetail {

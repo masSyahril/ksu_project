@@ -1,3 +1,140 @@
+const slider = document.querySelector('.slider');
+const list = document.querySelector('.list');
+const thumbnail = document.querySelector('.thumbnail');
+const next = document.querySelector('#next');
+const prev = document.querySelector('#prev');
+const sliderItems = list.querySelectorAll('.item');
+const thumbnailItems = thumbnail.querySelectorAll('.item');
+let currentIndex = 0;
+
+next.addEventListener('click', ()=> {
+    initSlider('next');
+});
+
+prev.addEventListener('click', ()=> {
+    initSlider('prev');
+});
+
+const initSlider = (type) => {
+    if(type === 'next'){
+        currentIndex = (currentIndex + 1) % sliderItems.length;
+        list.appendChild(sliderItems[0]);
+        thumbnail.appendChild(thumbnailItems[0]);
+        slider.classList.add('next');
+    } else if (type === 'prev') {
+        if(currentIndex === 0) {
+            currentIndex = 1;
+        } else if(currentIndex === 1) {
+            currentIndex = 0;
+        }
+        list.appendChild(sliderItems[currentIndex].cloneNode(true));
+        thumbnail.appendChild(thumbnailItems[currentIndex].cloneNode(true));
+        slider.classList.add('next');
+        setTimeout(() => {
+            list.removeChild(sliderItems[0]);
+            thumbnail.removeChild(thumbnailItems[0]);
+        }, 0);
+    }
+
+    setTimeout(() => {
+        slider.classList.remove('next');
+    }, 2000);
+};
+
+
+
+
+==============================***=============================
+
+const slider = document.querySelector('.slider');
+const list = document.querySelector('.list');
+const thumbnail = document.querySelector('.thumbnail');
+const next = document.querySelector('#next');
+const prev = document.querySelector('#prev');
+
+next.addEventListener('click', ()=> {
+    initSlider('next');
+});
+
+prev.addEventListener('click', ()=> {
+    initSlider('prev');
+});
+
+const initSlider = (type) => {
+    const sliderItems = list.querySelectorAll('.item');
+    const thumbnailItems = thumbnail.querySelectorAll('.item');
+
+    if(type === 'next'){
+        list.appendChild(sliderItems[0]);
+        thumbnail.appendChild(thumbnailItems[0]);
+        slider.classList.add('next');
+    } else{
+        // const lastItemPosition = sliderItems.length-1;
+        // list.prepend(sliderItems[lastItemPosition]);
+        // thumbnail.prepend(thumbnailItems[lastItemPosition]);
+        // slider.classList.add('prev');
+        list.appendChild(sliderItems[sliderItems.length - 1].cloneNode(true));
+        thumbnail.appendChild(thumbnailItems[thumbnailItems.length - 1].cloneNode(true));
+        slider.classList.add('next');
+        setTimeout(() => {
+            list.removeChild(sliderItems[0]);
+            thumbnail.removeChild(thumbnailItems[0]);
+        }, 0);
+    }
+
+    setTimeout(() => {
+        slider.classList.remove('next');
+        // slider.classList.remove('prev');
+    }, 2000);
+};
+
+===============***==============
+
+const slider = document.querySelector('.slider');
+const list = document.querySelector('.list');
+const thumbnail = document.querySelector('.thumbnail');
+const next = document.querySelector('#next');
+const prev = document.querySelector('#prev');
+
+next.addEventListener('click', ()=> {
+    initSlider('next');
+});
+
+prev.addEventListener('click', ()=> {
+    initSlider('prev');
+});
+
+const initSlider = (type) => {
+    const sliderItems = list.querySelectorAll('.item');
+    const thumbnailItems = thumbnail.querySelectorAll('.item');
+
+    if(type === 'next'){
+        list.appendChild(sliderItems[0]);
+        thumbnail.appendChild(thumbnailItems[0]);
+        slider.classList.add('next');
+    } else{
+        const lastItemPosition = sliderItems.length-1;
+        list.prepend(sliderItems[lastItemPosition]);
+        thumbnail.prepend(thumbnailItems[lastItemPosition]);
+        slider.classList.add('prev');
+        setTimeout(() => {
+            list.removeChild(sliderItems[1]);
+            thumbnail.removeChild(thumbnailItems[1]);
+        }, 0);
+    }
+
+    setTimeout(() => {
+        slider.classList.remove('next');
+        slider.classList.remove('prev');
+    }, 2000);
+};
+
+
+
+
+
+
+==============STYLE.css====================
 body {
   font-family: "Roboto", Arial, Helvetica, sans-serif;
   font-weight: 400;
@@ -339,7 +476,32 @@ header nav a {
 .slider.prev .list .item:nth-child(2) figure,
 .slider.prev .list .item:nth-child(2) .desc, 
 .slider.prev .list .item:nth-child(2) .more {
-    animation:hideDetail 0.5s  linear 1 forwards;
+    animation:hideDetail 0.5s 1s linear 1 forwards;
+}
+
+@keyframes showDetail {
+    to {
+        transform: translateY(0);
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+.slider.prev .list .item:nth-child(2) .title{
+    animation-delay: 1s;
+}
+.slider.prev .list .item:nth-child(2) .name{
+    animation-delay: 1.2s;
+} 
+.slider.prev .list .item:nth-child(2) figure{
+    animation-delay: 1.4s;
+}
+.slider.prev .list .item:nth-child(2) .desc{
+    animation-delay: 1.6s;
+}
+.slider.prev .list .item:nth-child(2) .more {
+    
+        animation-delay: 1.8s;
+    
 }
 
 @keyframes hideDetail {
@@ -352,6 +514,35 @@ header nav a {
     
 }
 
+.slider.prev .list .item:nth-child(2) .title,
+.slider.prev .list .item:nth-child(2) .name, 
+.slider.prev .list .item:nth-child(2) figure,
+.slider.prev .list .item:nth-child(2) .desc, 
+.slider.prev .list .item:nth-child(2) .more {
+    transform: translateY(50px);
+    filter: blur(50px);
+    opacity: 0;
+    animation:showDetail 0.5s 1s linear forwards;
+}
+
+.slider.prev .list .item:nth-child(2) .title{
+    animation-delay: 1s;
+}
+.slider.prev .list .item:nth-child(2) .name{
+    animation-delay: 1.2s;
+} 
+.slider.prev .list .item:nth-child(2) figure{
+    animation-delay: 1.4s;
+}
+.slider.prev .list .item:nth-child(2) .desc{
+    animation-delay: 1.6s;
+}
+.slider.prev .list .item:nth-child(2) .more {
+    
+        animation-delay: 1.8s;
+    
+}
+
 .slider.next .arrows button,
 .slider.prev .arrows button{
     pointer-events: none;
@@ -361,7 +552,7 @@ header nav a {
 .loading-bar{
     width: 0%;
     height: 5px;
-    background-color: #f80;
+    background-color: rgba(117, 13, 20, 0.378);
     position: absolute;
     z-index: 2;
     top: 0;
@@ -377,6 +568,21 @@ header nav a {
 @keyframes loadingtime {
     to {
         width: 0;
+    }
+}
+
+
+/* ,obile BreakPoint  */
+
+@media  screen and (max-width: 678px) {
+    .slider .list .item .detail .name  {
+        font-size: 2.2rem;
+        line-height: 2.8rem;
+
+    }
+    
+    .slider .list .item .detail .desc {
+        font-size: 1.8rem;
     }
 }
 /* 
