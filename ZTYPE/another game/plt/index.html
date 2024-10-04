@@ -3,177 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Game with 5 Characters</title>
+    <title>Typing Game with Lanes</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        #gameArea {
-            position: relative;
-            width: 100%;
-            height: 500px;
-            background-color: #e0e0e0;
+        body, html {
+            margin: 0;
+            padding: 0;
             overflow: hidden;
-            border: 1px solid #333;
+            background-color: black; /* Background color for fallback */
         }
 
-        #characterContainer {
+        canvas {
+            display: block;
+            width: 80vw;
+            height: 100vh;
+        }
+
+        .menu {
             position: absolute;
-            left: 0;
-            top: 0;
-            width: 100px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            z-index: 10;
         }
 
-        .character {
-            width: 80px;
-            height: 100px;
-            background-color: #333;
-            border-radius: 10px;
-            background-image: url('character1.png'); /* Gunakan gambar karakter di sini */
-            background-size: cover;
-        }
-
-        .word {
-            position: absolute;
-            color: #fff;
+        .menu button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
             font-size: 24px;
-            background-color: #f00;
-            padding: 10px;
+            cursor: pointer;
+            margin: 10px;
             border-radius: 5px;
         }
 
-        #scoreBoard {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
+        .menu button:hover {
+            background-color: #218838;
         }
 
-        #userInput {
-            width: 100%;
-            padding: 10px;
-            font-size: 18px;
+        #scoreBoard {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+            z-index: 5;
+        }
+
+        #lives {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+            z-index: 5;
+        }
+
+        .lostLife {
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div id="gameArea">
-        <!-- Karakter berada di sisi kiri layar -->
-        <div id="characterContainer">
-            <div class="character"></div>
-            <div class="character"></div>
-            <div class="character"></div>
-            <div class="character"></div>
-            <div class="character"></div>
-        </div>
+    <div id="scoreBoard">Score: 0</div>
+    <div id="lives">Lives: 5</div>
+    <canvas id="gameCanvas"></canvas>
+    <div class="menu" id="menu">
+        <h1>Typing Game</h1>
+        <button id="startButton">Start Game</button>
+        <button id="closeButton">Close Game</button>
     </div>
-
-    <div id="scoreBoard">
-        <div>Score: <span id="score">0</span></div>
-        <div>Lives: <span id="lives">3</span></div>
-    </div>
-
-    <input type="text" id="userInput" placeholder="Type the words here..." oninput="checkInput()">
-
-    <div id="message"></div>
 
     <script>
-        let words = ['apple', 'banana', 'cherry', 'orange', 'grape', 'mango', 'strawberry'];
-        let score = 0;
-        let lives = 3;
+        // Setup canvas and context
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth * 0.8; // 80% of screen width
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial resize on load
+
+        let words = ['sword', 'shield', 'enemy', 'battle', 'hero'];
         let activeWords = [];
-        let speed = 2;
-        let wordInterval;
-        let wordDelay = 3000;
+        let score = 0;
+        let lives = 5;
+        let lanes = [0, 1, 2, 3, 4]; // 5 lanes
+        let laneHeight = canvas.height / lanes.length; // Equal lane height
+        let wordSpeed = 9; // Slower speed
+        let gameActive = false;
+        let lastSpawnTime = 0; // Keep track of last word spawn time
+        let isDizzy = false; // Track if a character is dizzy
+        const characterImages = {};
+        const characterCount = 5; 
+        const characterSize = canvas.height / 5; // Calculate character size based on screen height
 
-        function spawnWord() {
-            let word = words[Math.floor(Math.random() * words.length)];
-            let wordElement = document.createElement('div');
-            wordElement.classList.add('word');
-            wordElement.textContent = word;
-            wordElement.style.top = Math.floor(Math.random() * 80) + '%';
-            wordElement.style.left = '100%';
-            document.getElementById('gameArea').appendChild(wordElement);
+        // Load background image
+        const backgroundImage = new Image();
+        backgroundImage.src = 'https://images.unsplash.com/photo-1601370690183-1c7796ecec61?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8fA%3D%3D';
 
-            let newWord = {
-                element: wordElement,
-                text: word,
-                xPos: 100
-            };
-
-            activeWords.push(newWord);
+        // Load character images (Placeholder)
+        for (let i = 1; i <= characterCount; i++) {
+            const img = new Image();
+            img.src = `character${i}.png`; // Ensure you have character images in the right path
+            characterImages[`character${i}`] = img;
         }
 
-        function moveWords() {
-            activeWords.forEach((wordObj, index) => {
-                wordObj.xPos -= speed / 10;
-                wordObj.element.style.left = wordObj.xPos + '%';
-
-                if (wordObj.xPos <= 5) {  // Kata mendekati karakter di sebelah kiri
-                    document.getElementById('gameArea').removeChild(wordObj.element);
-                    activeWords.splice(index, 1);
-                    loseLife();  // Kehilangan nyawa jika kata mencapai karakter
-                }
-            });
-        }
-
-        function checkInput() {
-            let userInput = document.getElementById('userInput').value.toLowerCase();
-
-            activeWords.forEach((wordObj, index) => {
-                if (userInput === wordObj.text) {
-                    document.getElementById('gameArea').removeChild(wordObj.element);
-                    activeWords.splice(index, 1);
-                    score += 10;
-                    document.getElementById('score').textContent = score;
-                    document.getElementById('message').textContent = `Benar! +10 poin.`;
-                    document.getElementById('userInput').value = '';
-                }
-            });
-        }
-
-        function loseLife() {
-            lives--;
-            document.getElementById('lives').textContent = lives;
-
-            if (lives <= 0) {
-                endGame();
+        // Initialize words with a fixed delay of 4 seconds
+        function spawnWords() {
+            const now = Date.now();
+            if (now - lastSpawnTime > 4000) { // 4-second interval
+                let availableLane = lanes[Math.floor(Math.random() * lanes.length)];
+                let wordObj = {
+                    word: words[Math.floor(Math.random() * words.length)],
+                    typed: '',
+                    x: canvas.width,
+                    y: availableLane * laneHeight + laneHeight / 2 // Set Y based on lane
+                };
+                activeWords.push(wordObj);
+                lastSpawnTime = now; // Update the last spawn time
             }
         }
 
-        function endGame() {
-            clearInterval(gameInterval);
-            clearInterval(wordInterval);
-            document.getElementById('message').textContent = 'Game Over! Skor Anda: ' + score;
-            activeWords.forEach((wordObj) => {
-                document.getElementById('gameArea').removeChild(wordObj.element);
-            });
-            activeWords = [];
-            document.getElementById('userInput').disabled = true;
+        function drawCharacter(lane, isDizzy) {
+            const img = characterImages[`character${lane + 1}`];
+            const x = 0; // Fixed position at the start of the canvas
+            const y = lane * laneHeight + laneHeight / 2; // Centered vertically in the lane
+
+            // Draw character box
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent background for character box
+            ctx.fillRect(x - 10, y - characterSize / 2, characterSize + 20, characterSize); // Box dimensions
+
+            if (img) {
+                // Apply shaking effect if character is dizzy
+                const shakeOffset = isDizzy ? (Math.sin(Date.now() / 100) * 5) : 0;
+                ctx.drawImage(img, x + shakeOffset, y - characterSize / 2, characterSize, characterSize); // Adjust size and position of characters
+            }
         }
 
-        function startWordInterval() {
-            wordInterval = setInterval(() => {
-                spawnWord();
-            }, wordDelay);
+        function drawWords() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous drawings
+            ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height); // Draw background image
+
+            activeWords.forEach((wordObj) => {
+                const { word, typed, x, y } = wordObj;
+
+                // Draw the word
+                for (let i = 0; i < word.length; i++) {
+                    ctx.fillStyle = i < typed.length ? (word[i] === typed[i] ? 'green' : 'red') : 'white'; // Change color based on typing
+                    ctx.font = '50px Arial';
+                    ctx.fillText(word[i], x + i * 40, y); // Adjust x position for each letter
+                }
+
+                // Move word left
+                wordObj.x -= wordSpeed; 
+
+                // Check for collision with character box
+                if (wordObj.x < characterSize) { // Assuming the character is at the left side
+                    const laneIndex = Math.floor(y / laneHeight);
+                    if (laneIndex >= 0 && laneIndex < lanes.length) {
+                        isDizzy = true; // Set character as dizzy
+                        lives--; // Decrease lives only when word reaches character box
+
+                        // Flash the lives indicator red when losing a life
+                        const livesElement = document.getElementById('lives');
+                        livesElement.classList.add('lostLife');
+                        setTimeout(() => livesElement.classList.remove('lostLife'), 500); // Remove the class after 500ms
+
+                        if (lives <= 0) {
+                            alert('Game Over! You missed too many words.');
+                            resetGame();
+                        }
+                        activeWords.shift(); // Remove the missed word
+                    }
+                }
+
+                // If the word goes off the canvas
+                if (wordObj.x < -200) {
+                    activeWords.shift(); // Remove the missed word but don't decrease lives
+                }
+            });
+
+            // Draw all characters at their respective lanes
+            lanes.forEach(lane => drawCharacter(lane, isDizzy)); // Initial drawing, apply dizzy effect when needed
+            isDizzy = false; // Reset dizzy effect after draw
+
+            // Update score and lives on the screen
+            document.getElementById('scoreBoard').innerText = 'Score: ' + score;
+            document.getElementById('lives').innerText = 'Lives: ' + lives;
+        }
+
+        function gameLoop() {
+            if (gameActive) {
+                spawnWords(); // Spawn words at 4-second intervals
+                drawWords(); // Draw the words on the canvas
+                requestAnimationFrame(gameLoop);
+            }
         }
 
         function startGame() {
-            gameInterval = setInterval(() => {
-                moveWords();
-            }, 100);
-
-            startWordInterval();
+            document.getElementById('menu').style.display = 'none'; // Hide menu
+            gameActive = true; // Set game to active
+            score = 0; // Reset score
+            lives = 5; // Set lives to 5
+            activeWords = []; // Clear active words
+            gameLoop(); // Start the game loop
         }
 
-        startGame();
+        function resetGame() {
+            gameActive = false; // Set game to inactive
+            document.getElementById('menu').style.display = 'block'; // Show menu again
+            activeWords = []; // Clear active words
+        }
+
+        function closeGame() {
+            alert("Thank you for playing! Please close the tab manually.");
+        }
+
+        // Event listeners for buttons
+        document.getElementById('startButton').addEventListener('click', startGame);
+        document.getElementById('closeButton').addEventListener('click', closeGame);
+
+        // Keyboard input for typing
+        window.addEventListener('keydown', (e) => {
+            if (gameActive && activeWords.length > 0) {
+                let firstWord = activeWords[0]; // Always focus on the first word
+                if (e.key === firstWord.word[firstWord.typed.length]) {
+                    firstWord.typed += e.key; // Add correct letter
+                    if (firstWord.typed === firstWord.word) {
+                        score++; // Increase score
+                        activeWords.shift(); // Remove the word from the list after it's fully typed
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>
-
-<!-- aldmal -->
