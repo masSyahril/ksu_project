@@ -1,0 +1,118 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #000;
+}
+
+canvas {
+  display: block;
+  width: 100vw;  /* Lebar kanvas mengikuti lebar layar */
+  height: 100vh; /* Tinggi kanvas mengikuti tinggi layar */
+}
+
+.menu {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  z-index: 10;
+}
+
+.menu button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 24px;
+  cursor: pointer;
+  margin: 10px;
+  border-radius: 5px;
+}
+
+.menu button:hover {
+  background-color: #218838;
+}
+
+#characterBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 14vw;
+  height: 100vh;
+  background-color: rgba(51, 51, 51, 0.8); /* Semi-transparent background for character box */
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  text-align: center;
+  z-index: 1;
+}
+
+/* Pengaturan umum game container */
+.game-container {
+  position: relative;
+  width: 100vw; /* Sesuaikan lebar dengan layar penuh */
+  height: 100vh; /* Sesuaikan tinggi dengan layar penuh */
+  overflow: hidden; /* Agar tidak ada elemen yang keluar dari layar */
+  background-color: #87CEEB; /* Warna langit sebagai latar belakang */
+}
+
+/* Pengaturan background seperti rumput dan tanah */
+.background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url('images/background.jpg') no-repeat center bottom; /* Sesuaikan path jika berbeda */
+  background-size: cover;
+}
+
+/* Pengaturan umum untuk karakter */
+.character {
+  position: absolute;
+  width: 50px; /* Ukuran lebar karakter */
+  height: 50px; /* Ukuran tinggi karakter */
+  bottom: 0; /* Karakter muncul di dasar layar */
+}
+
+/* Pengaturan gambar karakter */
+#character1 {
+  left: 10%; /* Posisi di layar */
+  bottom: 10%;
+  background: url('images/character1.PNG') no-repeat center center;
+  background-size: contain; /* Mengatur agar gambar pas di kotak */
+}
+
+#character2 {
+  left: 20%;
+  bottom: 20%;
+  background: url('images/character2.PNG') no-repeat center center;
+  background-size: contain;
+}
+
+#character3 {
+  left: 30%;
+  bottom: 30%;
+  background: url('images/character3.png') no-repeat center center;
+  background-size: contain;
+}
+
+#character4 {
+  left: 40%;
+  bottom: 40%;
+  background: url('images/character4.png') no-repeat center center;
+  background-size: contain;
+}
+
+#character5 {
+  left: 50%;
+  bottom: 50%;
+  background: url('images/character5.png') no-repeat center center;
+  background-size: contain;
+}
+

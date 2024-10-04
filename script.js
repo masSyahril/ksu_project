@@ -44,5 +44,5 @@ const initSlider = (type) => {
     clearTimeout(runAutoPlay);
     runAutoPlay = setTimeout(() => {
         next.click();
-    },8000);
+    },5000);
 };
