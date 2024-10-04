@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Mengetik dengan Papan Skor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="scoreboard">
+        <h1>Papan Skor</h1>
+        <div class="scores">
+            <div class="team">
+                <h2>Tim A</h2>
+                <div id="scoreA" class="score">0</div>
+                <button onclick="setActiveTeam('A')">Pilih Tim A</button>
+            </div>
+            <div class="team">
+                <h2>Tim B</h2>
+                <div id="scoreB" class="score">0</div>
+                <button onclick="setActiveTeam('B')">Pilih Tim B</button>
+            </div>
+        </div>
+        <button class="reset-btn" onclick="resetScores()">Reset Skor</button>
+    </div>
+
+    <div class="game">
+        <h2>Ketik Kata Ini:</h2>
+        <div id="wordToType" class="word">---</div>
+        <input type="text" id="userInput" placeholder="Ketik disini..." oninput="checkInput()">
+        <p id="message"></p>
+        <div id="timer">Waktu Tersisa: 3</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Defense Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Typing Defense Game</h1>
+        <div class="scoreboard">
+            <div class="score">Skor: <span id="score">0</span></div>
+            <div class="lives">Nyawa: <span id="lives">3</span></div>
+        </div>
+        <div class="game-area" id="gameArea">
+            <!-- Kata-kata akan muncul di sini -->
+        </div>
+        <input type="text" id="userInput" placeholder="Ketik kata disini..." oninput="checkInput()">
+        <p id="message"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
